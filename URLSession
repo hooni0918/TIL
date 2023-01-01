@@ -1,14 +1,13 @@
-mport UIKit
+# urlsession
 
+```swift
+import UIKit
 
-/*: 
 # CRUD 네트워킹
- */
-/*:
+
  ## GET메서드(서버에서 데이터 읽어오기)
- * (예) 인스타그램 - 내가 팔로잉하는 사람들의 게시글 보기
+(예) 인스타그램 - 내가 팔로잉하는 사람들의 게시글 보기
  ---
- */
 
 func getMethod() {
 
@@ -47,23 +46,16 @@ func getMethod() {
         // 원하는 모델이 있다면, JSONDecoder로 decode코드로 구현 ⭐️
         print(String(decoding: safeData, as: UTF8.self))
 
-
     }.resume()     // 시작
 }
 
-
 getMethod()
-
-
-
-
 
 /*:
  ## POST메서드(서버에 내가 원하는 new데이터 업로드하기)
  * (예) 인스타그램 - 나의 포스트 올리기 / 다른 사람의 게시물에 댓글 달기 / 서비스 가입하기
  ---
  */
-
 
 func postMethod() {
     
@@ -123,13 +115,6 @@ func postMethod() {
 }
 
 postMethod()
-
-
-
-
-
-
-
 
 /*:
  ## PUT메서드(서버에 현존하는 데이터 업데이트하기)
@@ -229,3 +214,4 @@ func deleteMethod() {
 deleteMethod()
 
 //Copyright (c) 2021 we.love.code.allen@gmail.com
+```
