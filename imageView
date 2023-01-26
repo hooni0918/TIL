@@ -340,9 +340,9 @@ URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
         
         - `[UIAccessibilityContentSizeCategoryImageAdjusting](https://developer.apple.com/documentation/uikit/uiaccessibilitycontentsizecategoryimageadjusting)`
         
-        ## **또한보십시오**
+        ##**또한보십시오**
         
-        ****콘텐츠 보기****
+        ***콘텐츠 보기***
         
         `[class UIActivityIndicatorView](https://developer.apple.com/documentation/uikit/uiactivityindicatorview)`
         
