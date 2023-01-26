@@ -1,0 +1,371 @@
+# imageView
+
+[https://developer.apple.com/documentation/uikit/uiimageview](https://developer.apple.com/documentation/uikit/uiimageview)
+
+인터페이스에 **단일 이미지** 또는 **일련의 애니메이션 이미지**를 표시하는 보기입니다.
+
+## **선언**
+
+```swift
+import UIKit
+
+class ViewController: UIViewController {
+
+    let imageView: UIImageView = {
+        let aImageView = UIImageView()
+        aImageView.backgroundColor = .red
+        //표시될 UIImage 객체 부여
+        aImageView.image = UIImage(named: "cat")
+        aImageView.translatesAutoresizingMaskIntoConstraints = false
+        return aImageView
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        view.addSubview(imageView)
+
+        NSLayoutConstraint.activate([
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 200),
+            imageView.heightAnchor.constraint(equalToConstant: 230),
+        ])
+    }
+}
+```
+
+![스크린샷 2023-01-23 오후 10.56.04.png](imageView%2020a8466f3f7f4c21904893b16825b34d/%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2023-01-23_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_10.56.04.png)
+
+1. 개체 라이브러리에서 UIImageView를 검색하고 결과를 스토리보드로 드래그합니다.
+2. 이미지 보기에 대한 자동 레이아웃 규칙을 정의하여 다른 화면 장치에서 위치와 크기를 제어합니다.
+3. ViewController 클래스에서 이미지 뷰의 연결 콘센트를 만듭니다.
+4. 프로그래밍 방식으로 또는 스토리보드를 사용하여 이미지를 이미지 뷰에 할당합니다.
+
+---
+
+### **이미지 크기 조정 방법 이해**
+
+이미지 보기는 해당 속성과 이미지 자체의 구성을 사용하여 이미지를 표시하는 방법을 결정합니다. 크기가 이미지 보기의 크기와 정확히 일치하는 이미지를 지정하는 것이 가장 좋지만 이미지 보기는 사용 가능한 공간의 전부 또는 일부에 맞게 이미지 크기를 조정할 수 있습니다. 이미지 뷰 자체의 크기가 변경되면 필요에 따라 이미지 크기가 자동으로 조정됩니다.`[contentMode](https://developer.apple.com/documentation/uikit/uiview/1622619-contentmode)`
+
+![스크린샷 2023-01-23 오후 11.06.02.png](imageView%2020a8466f3f7f4c21904893b16825b34d/%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2023-01-23_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_11.06.02.png)
+
+### [ContentMode](https://sujinnaljin.medium.com/ios-%EC%82%AC%EC%A7%84%EC%9C%BC%EB%A1%9C-%EB%B3%B4%EB%8A%94-aspectfit-aspectfit-scaletofill-f41470d0191f)
+
+# 1. ScaleToFill
+
+```swift
+imageView.contentMode = .scaleToFill
+```
+
+![simulator_screenshot_9318FBBF-6681-413D-A5DC-4FCFD3D58E73.png](imageView%2020a8466f3f7f4c21904893b16825b34d/simulator_screenshot_9318FBBF-6681-413D-A5DC-4FCFD3D58E73.png)
+
+ScaleToFill은 비율과 상관없이 UIImageView 사이즈에 이미지를 맞추는 겁니다.
+
+비율이 맞지 않는 사진을 넣으면 옆이나 위로 늘어납니다.
+
+(비율을 깨뜨리면서 까지 뷰 사이즈를 맞춰 이미지를 채우는 방식)
+
+# 2. AspectFit
+
+```swift
+imageView.contentMode = .scaleAspectFit
+```
+
+![simulator_screenshot_53EA1C33-2C70-4420-BBD0-00B13C760CE1.png](imageView%2020a8466f3f7f4c21904893b16825b34d/simulator_screenshot_53EA1C33-2C70-4420-BBD0-00B13C760CE1.png)
+
+AspectFit과 AspectFill은 모두 비율을 유지한다는 뜻입니다.
+
+AspectFit은 높이든 너비든 더 큰 값을 현재 ImageView의 사이즈에 맞추고 나머지는 비율에 맞춘다는 뜻입니다.
+
+위의 그림을 볼 때 높이보다 너비가 더 크기 때문에 위아래를 UIImageView사이즈에 맞추고 너비는 비율에 맞게 조절되므로
+
+결과적으로 위아래에 공백( backgroundColor 빨강색 )이 생깁니다.
+
+**(비율을 유지하면서 뷰 사이즈에 맞게 이미지를 늘리며 남는 부분은 투명하게 처리)**
+
+# 3. AspectFill
+
+```swift
+imageView.contentMode = .scaleAspectFill
+```
+
+![simulator_screenshot_A7D9A18F-FA06-4302-9788-1872FE7D6D7B.png](imageView%2020a8466f3f7f4c21904893b16825b34d/simulator_screenshot_A7D9A18F-FA06-4302-9788-1872FE7D6D7B.png)
+
+AspectFit과 같이 비율은 맞추지만 차이점은 높이든 너비든 더 작은 값을 현재 UIImageView의 사이즈에 맞춘다는 뜻입니다.
+
+만약 넘치는 부분을 자르는 속성인 clipsToBounds가 true였다면 위아래가 짤린 사진이 표시됬을 겁니다.
+
+**(비율을 유지하면서 뷰 사이즈에 맞게 이미지를 채우는 옵션)**
+
+| AspectFill | 비율 유지 O | 화면 꽉 채움 O | 이미지 잘림 O |
+| --- | --- | --- | --- |
+| AspectFit | 비율 유지 O | 화면 꽉 채움 X | 이미지 잘림 X |
+| ScaleToFill | 비율 유지 X | 화면 꽉 채움 O | 이미지 잘림 X |
+
+---
+
+### **이미지의 최종 투명도 결정**
+
+이미지는 이미지 뷰의 배경에 합성된 다음 창의 나머지 부분에 합성됩니다. 이미지의 모든 투명도는 이미지 보기의 배경이 비쳐 보이도록 합니다. 마찬가지로 이미지 배경의 추가 투명도는 이미지 보기의 투명도와 `[UIImage](https://developer.apple.com/documentation/uikit/uiimage)`표시되는 개체의 투명도에 따라 달라집니다. 이미지 뷰와 해당 이미지가 모두 투명하면 이미지 뷰는 알파 블렌딩을 사용하여 둘을 결합합니다.
+
+- 이미지는 이미지 뷰의 배경에 합성됩니다.
+- 이미지 뷰의 속성이 인 경우 이미지 픽셀은 이미지 뷰의 배경색 위에 합성되고 이미지 뷰의 속성은 무시됩니다.`[isOpaque](https://developer.apple.com/documentation/uikit/uiview/1622622-isopaque) true alpha`
+- 이미지 뷰의 속성이 인 경우 각 픽셀의 알파 값에 이미지 뷰의 값을 곱하고 결과 값이 해당 픽셀의 실제 투명도 값이 됩니다. 이미지에 알파 채널이 없으면 각 픽셀의 알파 값은 .`[isOpaque](https://developer.apple.com/documentation/uikit/uiview/1622622-isopaque) false [alpha](https://developer.apple.com/documentation/uikit/uiview/1622417-alpha) 1.0`
+
+**중요한**
+이미지의 알파 채널을 불투명하지 않은 이미지 보기의 알파 채널과 합성하는 것은 계산 비용이 많이 듭니다. Core Animation 그림자를 사용하면 그림자의 모양이 보기의 내용을 기반으로 하고 동적으로 계산되어야 하므로 성능에 미치는 영향이 더욱 커집니다. 의도적으로 이미지의 알파 채널 또는 이미지 뷰의 알파 채널을 사용하지 않는 경우 속성을 로 설정하여 성능을 향상시킵니다. 추가 최적화 팁은 [성능 개선](https://developer.apple.com/documentation/uikit/uiimageview#1658379) 을 참조하십시오 .`[isOpaque](https://developer.apple.com/documentation/uikit/uiview/1622622-isopaque) true`
+
+### **터치 이벤트에 응답**
+
+이미지 보기는 기본적으로 사용자 이벤트를 무시합니다. 일반적으로 이미지 보기는 인터페이스에 시각적 콘텐츠를 표시하기 위해서만 사용합니다. 이미지 뷰가 사용자 상호 작용도 처리하도록 하려면 속성 값을 로 변경합니다 . 그런 다음 제스처 인식기를 연결하거나 다른 이벤트 처리 기술을 사용하여 터치 이벤트 또는 기타 사용자 시작 이벤트에 응답할 수 있습니다.`[isUserInteractionEnabled](https://developer.apple.com/documentation/uikit/uiimageview/1621063-isuserinteractionenabled)true`
+
+이벤트 처리 에 대한 자세한 내용은 [UIKit 앱용 이벤트 처리 가이드를](https://developer.apple.com/library/archive/documentation/EventHandling/Conceptual/EventHandlingiPhoneOS/index.html#//apple_ref/doc/uid/TP40009541) 참조하세요.
+
+![스크린샷 2023-01-24 오전 12.02.25.png](imageView%2020a8466f3f7f4c21904893b16825b34d/%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2023-01-24_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%258C%25E1%2585%25A5%25E1%2586%25AB_12.02.25.png)
+
+위와같은 UI를 에서 View, Label 영역의 터치를 Button이 수신하게 할 수 있습니다.
+
+```swift
+view.isUserInteractionEnabled = false
+```
+
+ 이는, 유저가 원하는 이벤트가 event queue로부터 무시되고 삭제 되었는지를 판단하는 boolean값입니다.
+
+- 추가
+    
+    ### **isUserInteractionEnabled**
+    
+    **유저의 이벤트가 event queue로부터 무시되고 삭제됐는지를 판단하는 boolean 값**
+    
+    만약 `isUserInteractionEnabled == false`를 하면 view를 위한 touch, press, keyboard 그리고 focus event는 event queue에서 무시되고 삭제된다. 반대로 `isUserInteractionEnabled == true`를 하게 된다면 event는 정상적으로 뷰에 전달이 된다. default는 true이다.
+    
+    단, 예외사항으로
+    
+    애니메이션을 적용하는 동안에는 이 프로퍼티의 값이 false든 true든 상관없이 user interaction은 disable된다고 한다.애니메이션이 일어나는 뷰를 포함해서 말이다. 이를 막고싶다면 애니메이션 옵션으로 `allowUserInteraction`을 주면 된다.
+    
+    ### **isMultipleTouchEnabled**
+    
+    뷰가 한번에 2개 이상의 터치를 수신하는지 여부를 나타내는 boolean 값
+    
+    만약 `isMultipleTouchEnabled == true`를 설정하면 multi-touch sequence 와 관련된 모든 터치를 받고 뷰의 bounds에서 시작한다. 반면 `isMultipleTouchEnabled == false`를 설정하면 오직 multi-touch sequence 안에 있는 first touch event만 받는다고 한다. default는 false라고 한다.
+    
+    알아둬야 할 점은 이 프로퍼티는 gesture recognizer에 영향을 끼치지 않는다는 점이다.gesture recognizer는 view에서 일어나는 모든 터치를 수신한다.
+    
+    그리고 이 프로퍼티가 false로 설정되어있다고 할때, 같은 윈도우 안에있는 다른 뷰들은 여전히 터치 이벤트를 받을 수 있다는 특징이 잇다. 이런때에 multi-touch event를 서로 배타적으로 다루고 싶다면, `isExclusiveTouch`프로퍼티와 `isMultipleTouchEnabled` 프로퍼티를 둘다 true로 설정하면 된다고 한다.
+    
+    ### **isExclusiveTouch**
+    
+    리시버가 터치이벤트를 exclusively하게 다룰지를 나타내는 boolean 값
+    
+    만약 `isExclusiveTouch == true`로 설정하면 동일한 윈도우의 다른 뷰에 대한 터치이벤트를 차단한다. 반면 `isExclusiveTouch == false`를 한다면 차단하지 않는다. default는 false 값이다.
+    
+    동일한 윈도우안에서 어떤 뷰가 터치이벤트를 전달하면 다른 뷰에 대한 터치이벤트는 차단시키는 것이다.
+    
+    동일한 윈도우에서 서로 다른 뷰의 터치 이벤트 등을 처리할때 서로 관계없이 작업이 진행되게 하기 위해서 단순히 `isExclusiveTouch == true`를 하면 되는것같아 보이지만 
+    
+    문서에서는 이 뿐만 아니라 `isMultipleTouchEnabled == true` 까지 진행됩니다.
+    
+
+### **성능 향상**
+
+이미지 크기 조정 및 알파 블렌딩은 앱의 성능에 영향을 줄 수 있는 상대적으로 비용이 많이 드는 두 가지 작업입니다. 이미지 보기 코드의 성능을 최대화하려면 다음 팁을 고려하십시오.
+
+- **자주 사용되는 이미지의 캐시 스케일 버전.** 특정 대형 이미지가 축소된 썸네일 보기에 자주 표시될 것으로 예상되는 경우 축소된 이미지를 미리 만들어 썸네일 캐시에 저장하는 것이 좋습니다. 이렇게 하면 각 이미지 보기가 개별적으로 크기를 조정해야 할 필요성이 줄어듭니다.
+- **크기가 이미지 보기의 크기에 가까운 이미지를 사용하십시오.** 이미지 보기에 큰 이미지를 할당하는 대신 이미지 보기의 현재 크기와 일치하는 크기 조정된 버전을 만들었습니다. 이미지 를 크기 조정하는 대신 타일로 배열하는 옵션을 사용하여 크기 조정 가능한 이미지 개체를 만들 수도 있습니다 .`[UIImage.ResizingMode.tile](https://developer.apple.com/documentation/uikit/uiimage/resizingmode/tile)`
+- **가능할 때마다 이미지 보기를 불투명하게 만드십시오.** 의도적으로 투명도가 포함된 이미지(예: 드로잉 UI 요소)로 작업하지 않는 한 이미지 뷰의 속성이 로 설정되어 있는지 확인하세요 . 투명도 결정 방법에 대한 자세한 내용은 [이미지의 최종 투명도 결정](https://developer.apple.com/documentation/uikit/uiimageview#1658343) 을 참조하십시오 .`[isOpaque](https://developer.apple.com/documentation/uikit/uiview/1622622-isopaque)true`
+
+### **이미지 보기 문제 디버그**
+
+이미지 보기가 예상대로 표시되지 않으면 다음 팁을 사용하여 문제를 진단하십시오.
+
+- **올바른 방법을 사용하여 이미지를 로드합니다.** 방법을 사용하여 자산 카탈로그 또는 앱 번들에서 이미지를 로드합니다. 앱 번들 외부 이미지의 경우 이 방법을 사용하십시오`[init(named:in:compatibleWith:)](https://developer.apple.com/documentation/uikit/uiimage/1624154-init)[UIImage](https://developer.apple.com/documentation/uikit/uiimage)[imageWithContentsOfFile:](https://developer.apple.com/documentation/uikit/uiimage/1624123-imagewithcontentsoffile)`
+- **사용자 정의 도면에 이미지 보기를 사용하지 마십시오.** 클래스 는 메서드 를 사용하여 콘텐츠를 그리지 않습니다 . 이미지 보기는 이미지 표시에만 사용하십시오. 이미지와 관련된 사용자 지정 그리기를 수행하려면 직접 하위 클래스로 분류하고 거기에 이미지를 그립니다.`UIImageView[draw(_:)](https://developer.apple.com/documentation/uikit/uiview/1622529-draw)[UIView](https://developer.apple.com/documentation/uikit/uiview)`
+
+### **인터페이스 빌더 속성**
+
+다음 표에는 Interface Builder에서 이미지 보기에 대해 구성하는 속성이 나열되어 있습니다.
+
+| Attribute | Disscuss |
+| --- | --- |
+| image | 표시할 이미지입니다. 독립 실행형 이미지 및 이미지 자산의 이미지를 포함하여 Xcode 프로젝트의 모든 이미지를 지정할 수 있습니다. 프로그래밍 방식으로 이 특성을 설정하려면 https://developer.apple.com/documentation/uikit/uiimageview/1621069-imageor 속성을 사용합니다.https://developer.apple.com/documentation/uikit/uiimageview/1621068-animationimageshttps://developer.apple.com/documentation/uikit/uiimageview/1621068-animationimages |
+| Highlighted | 이미지 보기가 강조 표시될 때 표시할 이미지입니다. 프로그래밍 방식으로 이 특성을 설정하려면 or 속성을 사용합니다.https://developer.apple.com/documentation/uikit/uiimageview/1621066-highlightedimagehttps://developer.apple.com/documentation/uikit/uiimageview/1621066-highlightedimagehttps://developer.apple.com/documentation/uikit/uiimageview/1621065-highlightedanimationimageshttps://developer.apple.com/documentation/uikit/uiimageview/1621065-highlightedanimationimageshttps://developer.apple.com/documentation/uikit/uiimageview/1621065-highlightedanimationimages |
+| State | 이미지의 초기 상태입니다. 이 속성을 사용하여 이미지를 강조 표시된 것으로 표시합니다. 프로그래밍 방식으로 이 특성을 설정하려면 속성을 사용합니다 .https://developer.apple.com/documentation/uikit/uiimageview/1621060-ishighlightedhttps://developer.apple.com/documentation/uikit/uiimageview/1621060-ishighlighted |
+
+### 웹에서 이미지 가져오기
+
+이미지를 웹에서 가져오려면, 예를 들어 URLSession.shared.dataTask(with:)를 사용하여 이미지 데이터를 다운로드한 다음 UIImage(data:) 생성자를 사용하여 이미지를 생성할 수 있습니다.
+
+```swift
+URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
+  if let data = data, let image = UIImage(data: data) {
+    DispatchQueue.main.async {
+        imageView.image = image
+    }
+  }
+}.resume()
+
+```
+
+- 기타
+    
+    ### **국제화**
+    
+    이미지 보기의 국제화는 앱 번들에서 로드된 정적 이미지만 보기에 표시되는 경우 자동으로 이루어집니다. 프로그래밍 방식으로 이미지를 로드하는 경우 적어도 부분적으로는 올바른 이미지를 로드해야 합니다.
+    
+    - 앱 번들에 있는 리소스의 경우 속성 검사자에 이름을 지정하거나 `[init(named:)](https://developer.apple.com/documentation/uikit/uiimage/1624146-init)`클래스 메서드를 호출하여 `[UIImage](https://developer.apple.com/documentation/uikit/uiimage)`각 이미지의 현지화된 버전을 가져오면 됩니다.
+    - App Bundle에 없는 이미지의 경우 코드에서 다음을 수행해야 합니다.
+        1. URL이 포함된 현지화된 문자열을 제공하는 것과 같이 앱에 특정한 방식으로 로드할 이미지를 결정합니다.
+        2. 올바른 이미지의 URL 또는 데이터를 또는 `[UIImage](https://developer.apple.com/documentation/uikit/uiimage)`와 같은 적절한 클래스 메서드에 전달하여 해당 이미지를 로드합니다 .`[imageWithData:](https://developer.apple.com/documentation/uikit/uiimage/1624137-imagewithdata)[imageWithContentsOfFile:](https://developer.apple.com/documentation/uikit/uiimage/1624123-imagewithcontentsoffile)`
+    
+    **메모**
+    특히 이미지의 다국어 버전이 크기가 다른 경우 언어 및 로케일에 따라 화면 메트릭 및 레이아웃도 변경될 수 있습니다. 가능한 경우 이미지 리소스의 국제화 버전에서 차원 차이를 최소화하도록 노력해야 합니다.
+    
+    자세한 내용은 [현지화](https://developer.apple.com/documentation/xcode/localization) 를 참조하십시오 .
+    
+    ### **접근성**
+    
+    이미지 보기는 기본적으로 액세스할 수 있습니다. 이미지 보기의 기본 접근성 특성은 이미지 및 사용자 상호 작용 활성화입니다.
+    
+    iOS 컨트롤을 액세스 가능하게 만드는 방법에 대한 자세한 내용은 의 액세스 가능성 정보를 참조하십시오 `[UIControl](https://developer.apple.com/documentation/uikit/uicontrol)`. 인터페이스를 액세스 가능하게 만드는 방법에 대한 일반적인 정보는 [UIKit에 대한 접근성을](https://developer.apple.com/documentation/uikit/accessibility_for_uikit) 참조하십시오 .
+    
+    ### **상태 보존**
+    
+    이미지 보기의 속성에 값을 할당하면 표시된 이미지의 프레임을 유지하려고 시도합니다. 특히 이 클래스 는 뷰의 , 및 속성 값과 기본 레이어의 속성 을 유지합니다. 복원 중에 이미지 보기는 이미지가 이전과 동일하게 나타나도록 이러한 값을 복원합니다. 상태 보존 및 복원 작동 방식에 대한 자세한 내용은 [앱 상태 복원](https://developer.apple.com/documentation/uikit/uiscenedelegate/restoring_your_app_s_state) 을 참조하세요 .`[restorationIdentifier](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621499-restorationidentifier)[bounds](https://developer.apple.com/documentation/uikit/uiview/1622580-bounds)[center](https://developer.apple.com/documentation/uikit/uiview/1622627-center)[transform](https://developer.apple.com/documentation/uikit/uiview/1622459-transform)[anchorPoint](https://developer.apple.com/documentation/quartzcore/calayer/1410817-anchorpoint)`
+    
+    - **주제**
+        
+        
+        ****이미지 보기 만들기****
+        
+        `[init(image: UIImage?)](https://developer.apple.com/documentation/uikit/uiimageview/1621062-init)`
+        
+        지정된 이미지로 초기화된 이미지 뷰를 반환합니다.
+        
+        `[init(image: UIImage?, highlightedImage: UIImage?)](https://developer.apple.com/documentation/uikit/uiimageview/1621064-init)`
+        
+        지정된 일반 및 강조 표시된 이미지로 초기화된 이미지 뷰를 반환합니다.
+        
+        ****표시된 이미지에 액세스****
+        
+        `[var image: UIImage?](https://developer.apple.com/documentation/uikit/uiimageview/1621069-image)`
+        
+        이미지 보기에 표시되는 이미지입니다.
+        
+        `[var highlightedImage: UIImage?](https://developer.apple.com/documentation/uikit/uiimageview/1621066-highlightedimage)`
+        
+        이미지 보기에 표시된 강조 표시된 이미지입니다.
+        
+        ****일련의 이미지 애니메이션****
+        
+        `[var animationImages: [UIImage]?](https://developer.apple.com/documentation/uikit/uiimageview/1621068-animationimages)`
+        
+        `[UIImage](https://developer.apple.com/documentation/uikit/uiimage)`애니메이션에 사용할 객체 의 배열입니다 .
+        
+        `[var highlightedAnimationImages: [UIImage]?](https://developer.apple.com/documentation/uikit/uiimageview/1621065-highlightedanimationimages)`
+        
+        `[UIImage](https://developer.apple.com/documentation/uikit/uiimage)`보기가 강조 표시될 때 애니메이션에 사용할 개체 배열입니다 .
+        
+        `[var animationDuration: TimeInterval](https://developer.apple.com/documentation/uikit/uiimageview/1621058-animationduration)`
+        
+        이미지의 한 주기를 통과하는 데 걸리는 시간입니다.
+        
+        `[var animationRepeatCount: Int](https://developer.apple.com/documentation/uikit/uiimageview/1621070-animationrepeatcount)`
+        
+        애니메이션을 반복할 횟수를 지정합니다.
+        
+        `[func startAnimating()](https://developer.apple.com/documentation/uikit/uiimageview/1621061-startanimating)`
+        
+        수신기에서 이미지 애니메이션을 시작합니다.
+        
+        `[func stopAnimating()](https://developer.apple.com/documentation/uikit/uiimageview/1621057-stopanimating)`
+        
+        수신기에서 이미지 애니메이션을 중지합니다.
+        
+        `[var isAnimating: Bool](https://developer.apple.com/documentation/uikit/uiimageview/2097534-isanimating)`
+        
+        애니메이션이 실행 중인지 여부를 나타내는 부울 값을 반환합니다.
+        
+        ****기호 이미지의 모양 구성****
+        
+        [UI에서 기호 이미지 구성 및 표시](https://developer.apple.com/documentation/uikit/uiimage/configuring_and_displaying_symbol_images_in_your_ui)
+        
+        앱의 텍스트와 통합되는 확장 가능한 이미지를 만들고 해당 이미지의 모양을 동적으로 조정합니다.
+        
+        `[var preferredSymbolConfiguration: UIImage.SymbolConfiguration?](https://developer.apple.com/documentation/uikit/uiimageview/3295948-preferredsymbolconfiguration)`
+        
+        이미지를 렌더링할 때 사용할 구성 값입니다.
+        
+        ****이미지 보기 구성****
+        
+        `[var isUserInteractionEnabled: Bool](https://developer.apple.com/documentation/uikit/uiimageview/1621063-isuserinteractionenabled)`
+        
+        사용자 이벤트가 무시되고 이벤트 큐에서 제거되는지 여부를 결정하는 부울 값입니다.
+        
+        `[var isHighlighted: Bool](https://developer.apple.com/documentation/uikit/uiimageview/1621060-ishighlighted)`
+        
+        이미지가 강조 표시되는지 여부를 결정하는 부울 값입니다.
+        
+        `[var tintColor: UIColor!](https://developer.apple.com/documentation/uikit/uiimageview/1621059-tintcolor)`
+        
+        보기 계층 구조에서 템플릿 이미지의 색조를 지정하는 데 사용되는 색상입니다.
+        
+        ****포커스 관련 동작 관리****
+        
+        `[var adjustsImageWhenAncestorFocused: Bool](https://developer.apple.com/documentation/uikit/uiimageview/1627692-adjustsimagewhenancestorfocused)`
+        
+        조상이 집중되면 응답할 수 있습니다 .`UIImageView`
+        
+        `[var focusedFrameGuide: UILayoutGuide](https://developer.apple.com/documentation/uikit/uiimageview/1627691-focusedframeguide)`
+        
+        이미지 뷰에 포커스가 있을 때 사용할 레이아웃 가이드입니다.
+        
+        `[var masksFocusEffectToContents: Bool](https://developer.apple.com/documentation/uikit/uiimageview/2920037-masksfocuseffecttocontents)`
+        
+        플로팅 포커스 모양이 이미지의 알파 채널을 사용하는지 여부를 나타내는 부울 값입니다.
+        
+        ****이미지 뷰 위에 콘텐츠 레이어링****
+        
+        `[var overlayContentView: UIView](https://developer.apple.com/documentation/uikit/uiimageview/2882128-overlaycontentview)`
+        
+        이미지 보기 위에 계층화된 콘텐츠를 호스팅하기 위한 보기입니다.
+        
+        ## **관계**
+        
+        ****다음에서 상속****
+        
+        - `[UIView](https://developer.apple.com/documentation/uikit/uiview)`
+        
+        ****준수****
+        
+        - `[UIAccessibilityContentSizeCategoryImageAdjusting](https://developer.apple.com/documentation/uikit/uiaccessibilitycontentsizecategoryimageadjusting)`
+        
+        ## **또한보십시오**
+        
+        ****콘텐츠 보기****
+        
+        `[class UIActivityIndicatorView](https://developer.apple.com/documentation/uikit/uiactivityindicatorview)`
+        
+        작업이 진행 중임을 보여주는 보기입니다.
+        
+        `[class UICalendarView](https://developer.apple.com/documentation/uikit/uicalendarview)`
+        
+        날짜별 장식이 있는 달력을 표시하고 단일 날짜 또는 여러 날짜의 사용자 선택을 제공하는 보기입니다.
+        
+        `[class UIPickerView](https://developer.apple.com/documentation/uikit/uipickerview)`
+        
+        하나 이상의 값 집합을 표시하기 위해 물레 또는 슬롯머신 비유를 사용하는 보기입니다.
+        
+        `[class UIProgressView](https://developer.apple.com/documentation/uikit/uiprogressview)`
+        
+        시간 경과에 따른 작업의 진행 상황을 나타내는 보기입니다.
+        
+        `~~[class UIWebView](https://developer.apple.com/documentation/uikit/uiwebview)~~`
+        
+        앱에 웹 콘텐츠를 포함하는 보기입니다.
+        
+        더 이상 사용되지 않음
+        
+    
+
+---
